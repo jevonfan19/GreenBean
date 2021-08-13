@@ -15,6 +15,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import {Calendar,Agenda,CalendarList} from 'react-native-calendars';
 
 import { MainStack } from './Navigation/MainStack';
+import ActionModals from './Modals/ActionModals';
 const RootStack= createDrawerNavigator();
 const App =() =>{
   return(
@@ -24,6 +25,7 @@ const App =() =>{
               name="Agenda"
               component={MainStack}
             />
+            <RootStack.Screen name="ActionModals" component={ActionModals}/>
           </RootStack.Navigator>
     </NavigationContainer>
           
