@@ -1,22 +1,28 @@
 import React from 'react'
 import { View,Button,SafeAreaView,TextInput,Text} from 'react-native'
 import { useState } from 'react';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import axios from 'axios';
 const CreateScreen = props =>{
-    const [date , setDate] = useState(new Date());
-    const [storename,setStoreName] = useState('');
-    const [starttime, setStartTime] = useState('');
-    const [endtime, setEndTime] = useState('');
 
-    const [isDisabled, setDisabled]= useState(true);
+    //hooks to store data 
+    const [date , setDate] = useState('');
+    const [storename,setStoreName] = useState('');
+
+    
+    //sends what the user wrote to 
     const submitValue =()=>{
-        const scheduledetails ={
-            'Date' : date, 
-            'Store': storename,
-            'Start':starttime,
-            'End':endtime
-        }
-        props.navigation.navigate('Test Screen',{scheduledetails})
+        axios.post('http://192.168.1.26:3000/schedules',{
+            store:storename,
+            day: date,
+        })
+        .then(function (response){
+            props.navigation.navigate('Agenda')
+            console.log(response);
+        })
+        .catch(function(error){
+            console.log(JSON.stringify(error));
+        })
+
     }
     const showDate=()=>{
         setDisabled(false);
@@ -36,20 +42,6 @@ const CreateScreen = props =>{
                     borderWidth:1}}
                 placeholder=""
                 onChangeText={text=>setDate(text)}
-            />
-            <Text style={{margin:12}}>Start Time</Text>
-            <TextInput
-                style={{margin:12,
-                        borderWidth:1}}
-                placeholder=""
-                onChangeText={text=>setStartTime(text)}
-            />
-            <Text style={{margin:12}}>End Time</Text>
-            <TextInput
-                style={{margin:12,
-                        borderWidth:1}}
-                placeholder=""
-                onChangeText={text=>setEndTime(text)}
             />
             <Button
             onPress={submitValue}
